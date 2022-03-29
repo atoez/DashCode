@@ -1,0 +1,174 @@
+local UIS = game:GetService('UserInputService')
+local Player = game:GetService('Players').LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:wait()
+local Root = Character:WaitForChild('HumanoidRootPart')
+local AnimationIDDashForward = "rbxassetid://9214901393"
+local AnimationIDDashRight = "rbxassetid://9219141701"
+local AnimationIDDashLeft = "rbxassetid://9219211891"
+local AnimationIDDashBack = "rbxassetid://9219266895"
+local Humanoid = Character.Humanoid
+local Debounce = true
+
+local Dash_Normal = 37 -- set the default range for better control if you want to change it later on
+local Dash_Timeout = 0.40 -- how long will it wait in-between taps; think of this as tap speed
+local Can_Dash = false -- can the player dash immediately? no.
+
+function DashForward(root)
+	Debounce = false
+	local i = Instance.new('BodyPosition')
+	i.MaxForce = Vector3.new(120000,0,120000) -- y-component is 0 because we don't want them to fly
+	i.P = 200000
+	i.D = 3000
+	i.Position = (root.CFrame*CFrame.new(0,0,-Dash_Normal)).Position --get 20 units in front of the player
+	i.Parent = root
+	local Animation = Instance.new("Animation")
+	Animation.AnimationId = AnimationIDDashForward
+	local LoadAnimation = Humanoid:LoadAnimation(Animation)
+	LoadAnimation:Play()
+	coroutine.wrap(function()
+		wait(.35) --however long you want the dash to last
+		i:Destroy()-- remove the BodyMover (important!!)
+		Animation:Destroy()
+		LoadAnimation:Stop()
+		wait(3.5)
+	end)()
+end
+
+UIS.InputBegan:Connect(function(input,istyping)
+	if istyping then return end
+	if input.KeyCode == Enum.KeyCode.W then
+		if Can_Dash == true then
+			Debounce = false
+			Can_Dash = false
+			DashForward(Root)
+			wait(5)
+		else
+			
+			Can_Dash = true
+			coroutine.wrap(function()
+				wait(Dash_Timeout)
+				Can_Dash = false
+				
+			end)()
+		end
+	end
+end)
+	
+function DashLeft(root)
+	Debounce = false
+	local i = Instance.new('BodyPosition')
+	i.MaxForce = Vector3.new(1200000,0,1200000) -- y-component is 0 because we don't want them to fly
+	i.P = 200000
+	i.D = 3000
+	i.Position = (root.CFrame*CFrame.new(-Dash_Normal,0,0)).Position --get 20 units in front of the player
+	i.Parent = root
+	local Animation = Instance.new("Animation")
+	Animation.AnimationId = AnimationIDDashLeft
+	local LoadAnimation = Humanoid:LoadAnimation(Animation)
+	LoadAnimation:Play()
+	coroutine.wrap(function()
+		wait(.35) --however long you want the dash to last
+		i:Destroy() -- remove the BodyMover (important!!)
+		Animation:Destroy()
+		LoadAnimation:Stop()
+		wait(3.5)
+	end)()
+end
+
+UIS.InputBegan:Connect(function(input,istyping)
+	if istyping then return end
+	if input.KeyCode == Enum.KeyCode.A then
+		if Can_Dash == true then
+			Can_Dash = false
+			DashLeft(Root)
+			wait(5)
+		else
+
+			Can_Dash = true
+			coroutine.wrap(function()
+				wait(Dash_Timeout)
+				Can_Dash = false
+
+			end)()
+		end
+	end
+end)
+
+function DashBack(root)
+	Debounce = false
+	local i = Instance.new('BodyPosition')
+	i.MaxForce = Vector3.new(1200000,0,1200000) -- y-component is 0 because we don't want them to fly
+	i.P = 200000
+	i.D = 3000
+	i.Position = (root.CFrame*CFrame.new(0,0,Dash_Normal)).Position --get 20 units in front of the player
+	i.Parent = root
+	local Animation = Instance.new("Animation")
+	Animation.AnimationId = AnimationIDDashBack
+	local LoadAnimation = Humanoid:LoadAnimation(Animation)
+	LoadAnimation:Play()
+	coroutine.wrap(function()
+		wait(.35) --however long you want the dash to last
+		i:Destroy() -- remove the BodyMover (important!!)
+		Animation:Destroy()
+		LoadAnimation:Stop()
+		wait(3.3)
+	end)()
+end
+
+UIS.InputBegan:Connect(function(input,istyping)
+	if istyping then return end
+	if input.KeyCode == Enum.KeyCode.S then
+		if Can_Dash == true then
+			Can_Dash = false
+			DashBack(Root)
+			wait(5)
+		else
+
+			Can_Dash = true
+			coroutine.wrap(function()
+				wait(Dash_Timeout)
+				Can_Dash = false
+			end)()
+		end
+	end
+end)
+
+function DashRight(root)
+	Debounce = false
+	local i = Instance.new('BodyPosition')
+	i.MaxForce = Vector3.new(1200000,0,1200000) -- y-component is 0 because we don't want them to fly
+	i.P = 200000
+	i.D = 3000
+	i.Position = (root.CFrame*CFrame.new(Dash_Normal,0,0)).Position --get 20 units in front of the player
+	i.Parent = root
+	local Animation = Instance.new("Animation")
+	Animation.AnimationId = AnimationIDDashRight
+	local LoadAnimation = Humanoid:LoadAnimation(Animation)
+	LoadAnimation:Play()
+	coroutine.wrap(function()
+		wait(.35) --however long you want the dash to last
+		i:Destroy() -- remove the BodyMover (important!!)
+		Animation:Destroy()
+		LoadAnimation:Stop()
+		wait(3.5)
+	end)()
+end
+
+UIS.InputBegan:Connect(function(input,istyping)
+	if istyping then return end
+	if input.KeyCode == Enum.KeyCode.D then
+		if Can_Dash == true then
+			Can_Dash = false
+			DashRight(Root)
+			wait(5)
+		else
+
+			Can_Dash = true
+			coroutine.wrap(function()
+				wait(Dash_Timeout)
+				Can_Dash = false
+
+			end)()
+		end
+	end
+end)
